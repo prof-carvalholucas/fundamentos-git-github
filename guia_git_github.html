@@ -1,0 +1,115 @@
+<!doctype html><html lang='pt-BR'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Git + GitHub — do zero ao push</title><style>
+:root{--bg:#0b1020;--card:#151d33;--ink:#eef3ff;--muted:#aebbd6;--accent:#6ee7b7;--blue:#60a5fa;--line:#2a3655;--code:#070b14}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif;scroll-snap-type:y mandatory;overflow-y:scroll}.slide{min-height:100vh;padding:5vh 7vw;display:flex;flex-direction:column;justify-content:center;scroll-snap-align:start;border-bottom:1px solid #18223b}.kicker{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase}h1{font-size:clamp(42px,6vw,82px);margin:.15em 0}h2{font-size:clamp(32px,4.5vw,60px);margin:.1em 0 .45em}h3{font-size:24px;margin:.3em 0}p,li{font-size:clamp(18px,1.8vw,28px);line-height:1.45;color:var(--muted)}code,pre{font-family:Consolas,monospace}pre{background:var(--code);border:1px solid var(--line);padding:20px;border-radius:16px;overflow:auto;font-size:clamp(16px,1.45vw,23px);line-height:1.5;color:#d9f99d}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.card{background:var(--card);border:1px solid var(--line);padding:24px;border-radius:22px}.flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:25px 0}.node{background:var(--card);border:2px solid var(--blue);border-radius:18px;padding:16px 22px;font-size:22px;font-weight:700}.arrow{font-size:32px;color:var(--accent)}.cmd{color:var(--accent);font-weight:800}.tag{display:inline-block;padding:7px 12px;border-radius:999px;background:#1d2b4b;color:#bfdbfe;font-weight:700}.warn{border-left:6px solid #fbbf24}.ok{border-left:6px solid var(--accent)}.terminal:before{content:'Terminal / Git Bash';display:block;color:#94a3b8;margin-bottom:10px;font-size:14px}.small{font-size:17px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:850px){.grid,.three{grid-template-columns:1fr}.slide{padding:6vh 6vw}}
+@media print{@page{size:13.333in 7.5in;margin:0}html,body{background:#0b1020!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.slide{width:13.333in;height:7.5in;min-height:7.5in;max-height:7.5in;padding:.42in .65in;overflow:hidden;page-break-after:always;break-after:page}.slide:last-child{page-break-after:auto}h1{font-size:46pt}h2{font-size:32pt}h3{font-size:17pt}p,li{font-size:14.5pt;line-height:1.32}pre{font-size:11.5pt;line-height:1.32;padding:12px}.node{font-size:14pt;padding:10px 14px}.card{padding:15px;border-radius:14px}.grid{gap:12px}.flow{margin:14px 0;gap:8px}.arrow{font-size:22px}.small{font-size:11pt}}
+</style></head><body>
+<section class='slide'><span class='kicker'>Guia prático para estudantes</span><h1>Git + GitHub<br>do zero ao primeiro push</h1><p>Uma sequência de estudo usando um projeto local real, entendendo o que cada comando faz e como o código sai do computador e chega ao GitHub.</p><div class='flow'><span class='node'>Pasta local</span><span class='arrow'>→</span><span class='node'>Git</span><span class='arrow'>→</span><span class='node'>Commits</span><span class='arrow'>→</span><span class='node'>GitHub</span></div></section>
+
+<section class='slide'><span class='kicker'>Antes de começar · Visão geral</span><h2>Como o Git funciona?</h2><p>Imagine o Git como uma <b>linha do tempo do projeto</b>. Cada desenvolvedor trabalha em sua própria cópia, registra pontos seguros e depois compartilha esses pontos com a equipe.</p><div class='flow'><span class='node'>💻 Arquivos<br><small>você edita</small></span><span class='arrow'>→</span><span class='node'>📦 Stage<br><small>git add</small></span><span class='arrow'>→</span><span class='node'>📸 Commit<br><small>git commit</small></span><span class='arrow'>→</span><span class='node'>☁️ GitHub<br><small>git push</small></span></div><div class='card ok'><b>Ideia principal:</b> o Git controla versões localmente. O GitHub permite compartilhar essas versões e colaborar pela internet.</div></section>
+<section class='slide'><span class='kicker'>Antes de começar · Histórico</span><h2>Commits formam a história do software</h2><div class='flow'><span class='node'>● C1<br><small>projeto inicial</small></span><span class='arrow'>→</span><span class='node'>● C2<br><small>cria login</small></span><span class='arrow'>→</span><span class='node'>● C3<br><small>corrige validação</small></span><span class='arrow'>→</span><span class='node'>● C4<br><small>novo layout</small></span></div><p>Cada círculo representa um <b>commit</b>: um ponto identificado no histórico. Isso permite saber <b>quem alterou, o que mudou e em qual sequência</b>.</p><pre class='terminal'>git log --oneline</pre></section>
+<section class='slide'><span class='kicker'>Antes de começar · Branch</span><h2>Branch = uma linha paralela de trabalho</h2><p>Uma branch permite desenvolver uma funcionalidade sem alterar diretamente a versão principal.</p><div class='card'><pre style='font-size:clamp(18px,2vw,28px);line-height:1.7'>main       ●────●──────────────●
+                \              ↑ merge
+feature/login    ●────●────●────┘
+                 login em desenvolvimento</pre></div><div class='grid'><div class='card'><h3>main</h3><p>Representa a linha principal e, normalmente, a versão integrada do projeto.</p></div><div class='card'><h3>feature/login</h3><p>Espaço separado para implementar o login, testar e criar commits sem interromper a main.</p></div></div></section>
+<section class='slide'><span class='kicker'>Antes de começar · Branch na prática</span><h2>Crie uma branch para sua tarefa</h2><pre class='terminal'># veja onde você está
+git branch
+
+# crie a branch e já entre nela
+git switch -c feature/login
+
+# confirme a branch atual
+git branch</pre><p>O símbolo <code>*</code> indica a branch em que você está trabalhando.</p><pre>* feature/login
+  main</pre><div class='card ok'><b>Boa prática didática:</b> uma tarefa ou funcionalidade → uma branch. Exemplos: <code>feature/login</code>, <code>feature/cadastro</code>, <code>fix/validacao-email</code>.</div></section>
+<section class='slide'><span class='kicker'>Antes de começar · Trabalho distribuído</span><h2>Cada pessoa tem seu próprio repositório local</h2><div class='flow'><span class='node'>👩‍💻 Ana<br><small>clone local</small></span><span class='arrow'>push ↗</span><span class='node'>☁️ GitHub<br><small>repositório remoto</small></span><span class='arrow'>↙ pull</span><span class='node'>👨‍💻 João<br><small>clone local</small></span></div><p>Git é <b>distribuído</b>: Ana e João possuem uma cópia completa do repositório e do histórico. Eles podem criar commits localmente e sincronizar quando necessário.</p><div class='grid'><div class='card'><h3>Ana</h3><p><code>feature/login</code><br>trabalha no login.</p></div><div class='card'><h3>João</h3><p><code>feature/cadastro</code><br>trabalha no cadastro.</p></div></div></section>
+<section class='slide'><span class='kicker'>Antes de começar · Equipe</span><h2>Exemplo: duas branches ao mesmo tempo</h2><div class='card'><pre style='font-size:clamp(16px,1.7vw,24px);line-height:1.65'>                         ┌── ●──●  feature/login (Ana)
+main  ●────●─────────────┤
+                         └── ●──●  feature/cadastro (João)
+
+                         ↓ Pull Requests
+main  ●────●─────────────●────●</pre></div><p>Cada pessoa faz commits na própria branch, envia com <code>git push</code> e abre um <b>Pull Request</b>. Depois da revisão, as alterações podem ser integradas à <code>main</code>.</p></section>
+<section class='slide'><span class='kicker'>Antes de começar · Ciclo colaborativo</span><h2>Fluxo de trabalho distribuído</h2><div class='flow'><span class='node'>1. git pull<br><small>atualizar</small></span><span class='arrow'>→</span><span class='node'>2. branch<br><small>isolar tarefa</small></span><span class='arrow'>→</span><span class='node'>3. commit<br><small>registrar</small></span><span class='arrow'>→</span><span class='node'>4. push<br><small>publicar</small></span><span class='arrow'>→</span><span class='node'>5. PR<br><small>revisar</small></span></div><pre class='terminal'>git pull
+git switch -c feature/minha-tarefa
+# editar arquivos
+git add .
+git commit -m "feat: implementa minha tarefa"
+git push -u origin feature/minha-tarefa</pre><p>Esse mapa será retomado mais adiante. Primeiro vamos aprender cada comando separadamente.</p></section>
+
+<section class='slide'><span class='kicker'>Roteiro da aula · prática guiada</span><h2>Comandos que vamos exercitar</h2><p>Use esta página como checklist durante a aula. A sequência acompanha o ciclo real de um projeto: configurar, criar, versionar, publicar, atualizar e trabalhar em branch.</p><div class='grid'><div class='card'><h3>1. Preparar e criar</h3><pre>git --version
+git config --global user.name "Seu Nome"
+git config --global user.email "email@exemplo.com"
+git config --global --list
+mkdir projeto-git
+cd projeto-git
+git init -b main</pre></div><div class='card'><h3>2. Versionar localmente</h3><pre>git status
+git add README.md
+git add .
+git diff
+git commit -m "docs: primeiro commit"
+git log --oneline</pre></div><div class='card'><h3>3. Conectar e sincronizar</h3><pre>git remote add origin URL
+git remote -v
+git push -u origin main
+git pull
+git clone URL</pre></div><div class='card'><h3>4. Trabalhar com branch</h3><pre>git branch
+git switch -c feature/minha-tarefa
+git add .
+git commit -m "feat: minha tarefa"
+git push -u origin feature/minha-tarefa</pre></div></div></section>
+
+<section class='slide'><span class='kicker'>Ecossistema Git · servidores remotos</span><h2>GitHub não é o único servidor Git</h2><p>O <b>Git</b> é o sistema de controle de versão. Já serviços como GitHub, GitLab, Bitbucket e Azure Repos hospedam repositórios remotos e adicionam recursos de colaboração.</p><div class='grid'><div class='card'><h3>GitHub</h3><p>Hospedagem de repositórios Git, colaboração, Pull Requests e automação. Será a plataforma principal dos nossos exemplos.</p></div><div class='card'><h3>GitLab</h3><p>Plataforma de DevSecOps com repositórios Git e recursos integrados de planejamento, CI/CD, segurança e entrega.</p></div><div class='card'><h3>Bitbucket</h3><p>Hospedagem e colaboração Git da Atlassian, com integração forte ao Jira e CI/CD pelo Bitbucket Pipelines.</p></div><div class='card'><h3>Azure Repos</h3><p>Serviço do Azure DevOps para repositórios Git, Pull Requests, revisão de código e políticas de branch.</p></div></div><div class='card ok'><b>Importante:</b> os comandos Git continuam praticamente os mesmos. O que muda principalmente é a URL do repositório remoto e os recursos oferecidos pela plataforma.</div></section>
+
+<section class='slide'><span class='kicker'>Ecossistema Git · mesma ideia</span><h2>O mesmo projeto pode apontar para diferentes servidores</h2><div class='flow'><span class='node'>💻 Repositório local<br><small>Git</small></span><span class='arrow'>→</span><span class='node'>origin<br><small>URL remota</small></span><span class='arrow'>→</span><span class='node'>☁️ Servidor Git</span></div><div class='grid'><div class='card'><pre>git remote add origin https://github.com/aluno/projeto.git</pre><p>Exemplo com GitHub</p></div><div class='card'><pre>git remote add origin https://gitlab.com/aluno/projeto.git</pre><p>Exemplo com GitLab</p></div><div class='card'><pre>git remote add origin https://bitbucket.org/aluno/projeto.git</pre><p>Exemplo com Bitbucket</p></div><div class='card'><pre>git remote add origin https://dev.azure.com/org/projeto/_git/repo</pre><p>Exemplo de formato do Azure Repos</p></div></div><p>Depois de configurar o remoto, o fluxo continua familiar: <code>git push</code>, <code>git pull</code> e <code>git fetch</code>.</p></section>
+
+<section class='slide'><span class='kicker'>01 · Conceito</span><h2>Git não é GitHub</h2><div class='grid'><div class='card'><h3>Git</h3><p>Sistema de controle de versão instalado no computador. Registra o histórico das alterações do projeto.</p></div><div class='card'><h3>GitHub</h3><p>Plataforma online que hospeda repositórios Git e facilita colaboração, revisão e compartilhamento.</p></div></div><p><b>Imagem mental:</b> Git é a máquina fotográfica do histórico; GitHub é o álbum online compartilhado.</p></section>
+<section class='slide'><span class='kicker'>02 · Preparação</span><h2>Instale e confira o Git</h2><pre class='terminal'>git --version</pre><p>Se aparecer uma versão, o Git está disponível. Depois abra Git Bash, Terminal ou terminal integrado da IDE.</p><div class='card ok'><b>Objetivo:</b> antes de criar repositórios, garantir que o computador reconhece o comando <span class='cmd'>git</span>.</div></section>
+<section class='slide'><span class='kicker'>03 · Identidade</span><h2>Configure nome e e-mail</h2><pre class='terminal'>git config --global user.name "Seu Nome"
+git config --global user.email "seuemail@exemplo.com"
+
+git config --global --list</pre><p>Esses dados identificam o autor dos commits. <span class='tag'>--global</span> aplica a configuração aos seus repositórios no computador.</p></section>
+<section class='slide'><span class='kicker'>04 · Projeto local</span><h2>Crie uma pasta de estudo</h2><pre class='terminal'>mkdir projeto-git
+cd projeto-git</pre><p class='small'>No Windows/Git Bash use <code>cd projeto-git</code>. O “a” acima não é necessário — use somente o comando abaixo:</p><pre>cd projeto-git</pre><p>Crie dentro dela um arquivo <code>README.md</code> e, se quiser, um <code>index.html</code>.</p></section>
+<section class='slide'><span class='kicker'>05 · Inicialização</span><h2>Transforme a pasta em repositório</h2><pre class='terminal'>git init -b main</pre><div class='flow'><span class='node'>projeto-git/</span><span class='arrow'>+</span><span class='node'>.git/</span><span class='arrow'>=</span><span class='node'>Repositório Git</span></div><p>O diretório oculto <code>.git</code> guarda metadados e histórico. Não edite essa pasta manualmente.</p></section>
+<section class='slide'><span class='kicker'>06 · Diagnóstico</span><h2>Seu comando mais frequente</h2><pre class='terminal'>git status</pre><p>Mostra a situação do repositório: arquivos novos, modificados, preparados para commit e branch atual.</p><div class='card'><b>Regra de estudo:</b> ficou em dúvida? Rode <code>git status</code>.</div></section>
+<section class='slide'><span class='kicker'>07 · Fluxo local</span><h2>Working → Staging → Commit</h2><div class='flow'><span class='node'>Arquivo alterado<br><small>Working Directory</small></span><span class='arrow'>git add →</span><span class='node'>Preparado<br><small>Staging Area</small></span><span class='arrow'>git commit →</span><span class='node'>Histórico<br><small>Repository</small></span></div><p>O Git permite escolher exatamente quais mudanças entram no próximo “ponto salvo”.</p></section>
+<section class='slide'><span class='kicker'>08 · Stage</span><h2>Prepare arquivos para o commit</h2><pre class='terminal'>git add README.md
+# ou todos os arquivos da pasta
+git add .
+
+git status</pre><p><code>git add</code> não envia nada para a internet. Ele apenas coloca mudanças na área de preparação.</p></section>
+<section class='slide'><span class='kicker'>09 · Commit</span><h2>Crie um ponto no histórico</h2><pre class='terminal'>git commit -m "docs: adiciona README inicial"</pre><p>Um commit registra as alterações preparadas. Use mensagens curtas que expliquem <b>o que mudou</b>.</p><div class='card'><b>Exemplos:</b> <code>feat: adiciona cadastro</code> · <code>fix: corrige validação</code> · <code>docs: atualiza README</code></div></section>
+<section class='slide'><span class='kicker'>10 · Histórico</span><h2>Veja seus commits</h2><pre class='terminal'>git log --oneline</pre><p>Cada commit recebe um identificador. O log permite acompanhar a evolução do projeto.</p><pre>7f31abc docs: adiciona README inicial</pre></section>
+<section class='slide'><span class='kicker'>11 · GitHub</span><h2>Crie o repositório remoto</h2><p>No GitHub, crie um repositório vazio, por exemplo <code>projeto-git</code>. Para este exercício com código local já existente, evite inicializar o remoto com README, licença ou .gitignore.</p><div class='flow'><span class='node'>Git local</span><span class='arrow'>↔</span><span class='node'>origin</span><span class='arrow'>↔</span><span class='node'>GitHub</span></div></section>
+<section class='slide'><span class='kicker'>12 · Remote</span><h2>Conecte local e GitHub</h2><pre class='terminal'>git remote add origin https://github.com/SEU-USUARIO/projeto-git.git
+git remote -v</pre><p><code>origin</code> é apenas o nome/apelido normalmente usado para o repositório remoto principal.</p><div class='card warn'><b>Se aparecer “remote origin already exists”:</b><pre>git remote set-url origin NOVA-URL</pre></div></section>
+<section class='slide'><span class='kicker'>13 · Primeiro envio</span><h2>Push para o GitHub</h2><pre class='terminal'>git push -u origin main</pre><p><code>push</code> envia commits locais. <code>-u</code> define o vínculo da branch local <code>main</code> com a branch remota; depois, normalmente, basta <code>git push</code>.</p></section>
+<section class='slide'><span class='kicker'>14 · Ciclo diário</span><h2>O fluxo que você repetirá</h2><pre class='terminal'>git status
+git add .
+git commit -m "feat: descreva a alteração"
+git push</pre><div class='flow'><span class='node'>Editar</span><span class='arrow'>→</span><span class='node'>Status</span><span class='arrow'>→</span><span class='node'>Add</span><span class='arrow'>→</span><span class='node'>Commit</span><span class='arrow'>→</span><span class='node'>Push</span></div></section>
+<section class='slide'><span class='kicker'>15 · Atualização</span><h2>Traga mudanças do remoto</h2><pre class='terminal'>git pull</pre><p>Antes de começar a trabalhar em um projeto compartilhado, atualize sua branch local. O pull busca e integra alterações do remoto.</p></section>
+<section class='slide'><span class='kicker'>16 · Clonar</span><h2>Quando o projeto já existe no GitHub</h2><pre class='terminal'>git clone https://github.com/USUARIO/REPOSITORIO.git
+cd REPOSITORIO</pre><p><code>clone</code> cria uma cópia local completa do repositório e já configura o remoto <code>origin</code>.</p></section>
+<section class='slide'><span class='kicker'>17 · Branches</span><h2>Trabalhe sem mexer diretamente na main</h2><pre class='terminal'>git switch -c feature/login
+# faça alterações
+git add .
+git commit -m "feat: cria tela de login"
+git push -u origin feature/login</pre><div class='flow'><span class='node'>main</span><span class='arrow'>↗</span><span class='node'>feature/login</span><span class='arrow'>→</span><span class='node'>Pull Request</span></div></section>
+<section class='slide'><span class='kicker'>18 · Ignorar arquivos</span><h2>.gitignore evita lixo e segredos</h2><pre># exemplo
+node_modules/
+target/
+build/
+.env
+*.log
+.idea/
+</pre><p>Não versione dependências geradas, builds, configurações locais ou arquivos com segredos. Nunca envie senhas, tokens ou chaves de API.</p></section>
+<section class='slide'><span class='kicker'>19 · Inspeção</span><h2>Comandos que ajudam muito</h2><div class='grid three'><div class='card'><h3>git diff</h3><p>Mostra alterações ainda não preparadas.</p></div><div class='card'><h3>git branch</h3><p>Lista branches locais.</p></div><div class='card'><h3>git remote -v</h3><p>Mostra os remotos configurados.</p></div><div class='card'><h3>git restore arquivo</h3><p>Descarta alteração local não preparada.</p></div><div class='card'><h3>git restore --staged arquivo</h3><p>Retira arquivo do stage.</p></div><div class='card'><h3>git log --oneline</h3><p>Mostra histórico compacto.</p></div></div></section>
+<section class='slide'><span class='kicker'>20 · Desafio final</span><h2>Prática do início ao fim</h2><ol><li>Configure nome e e-mail.</li><li>Crie <code>projeto-git</code> e um README.</li><li>Inicialize Git na branch main.</li><li>Faça <code>add</code> + primeiro <code>commit</code>.</li><li>Crie repositório vazio no GitHub.</li><li>Configure <code>origin</code> e confira com <code>remote -v</code>.</li><li>Faça o primeiro <code>push -u origin main</code>.</li><li>Crie uma branch, altere o projeto e envie a branch.</li></ol></section>
+<section class='slide'><span class='kicker'>Resumo</span><h2>Mapa mental</h2><pre>CONFIGURAR → git config
+CRIAR      → git init
+VER        → git status / git diff
+PREPARAR   → git add
+REGISTRAR  → git commit
+CONECTAR   → git remote add origin URL
+ENVIAR     → git push
+ATUALIZAR  → git pull
+COPIAR     → git clone
+RAMIFICAR  → git switch -c minha-branch</pre><p>Domine primeiro este fluxo. Depois avance para merge, pull request, conflitos, rebase, tags e colaboração em equipe.</p></section>
+</body></html>
